@@ -1,3 +1,8 @@
+Dependencies
+============
+	python-requests
+	python-simplejson
+
 DruScan
 =======
 	$ ./druscan.py -h
