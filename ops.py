@@ -18,12 +18,13 @@ def opsx():
 	#
 
 	test = parser.add_argument_group('Testing')
-	test.add_argument("--url"         , action="store"     , dest="url"         , help="URL Drupal Site http://drupalsite.com"              , type=str )
+	test.add_argument("--url"         , action="store"     , dest="url"    , help="URL Drupal Site http://drupalsite.com", type=str )
 
-	test.add_argument("--modules"     , action="store_true", dest="modules"     , help="Search modules"                                , default=False)
-	test.add_argument("--themes"      , action="store_true", dest="themes"      , help="Search themes"                                 , default=False)
-	test.add_argument("--users"       , action="store_true", dest="user"        , help="Search users"                                  , default=False)
+	test.add_argument("--modules"     , action="store_true", dest="modules", help="Search modules"                       , default=False)
+	test.add_argument("--themes"      , action="store_true", dest="themes" , help="Search themes"                        , default=False)
+	test.add_argument("--users"       , action="store_true", dest="users"  , help="Search users"                         , default=False)
+	test.add_argument("--paths"       , action="store_true", dest="paths"  , help="Search paths"                         , default=False)
 
-	parser.add_argument('--version', action='version', version='%(prog)s 0.5 alpha')
+	parser.add_argument('--version', action='version', version='%(prog)s 0.7 alpha')
 
 	return parser.parse_args()

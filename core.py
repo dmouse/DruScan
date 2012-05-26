@@ -9,7 +9,7 @@ try:
 	import requests
 	from requests import async
 except ImportError: 
-	message ("Check dependences: python-requests required", "ERROR")
+	message ("Check dependences: python-requests required", "-" , "ERROR")
 	sys.exit(1) 
 
 
@@ -20,10 +20,19 @@ REG_GET_VERSION_D6 = r"(6)(\.x)(.*)"
 
 
 DRUPAL_MODULES = "http://drupal.org/project/modules"
-DRUPAL_THEMES = "http://drupal.org/project/themes"
+DRUPAL_THEMES  = "http://drupal.org/project/themes"
 D6_URL_ARGS = {"page":0,"filters":"drupal_core:87 bs_project_sandbox:0","solrsort":"sis_project_release_usage desc"}
 D7_URL_ARGS = {"page":0,"filters":"drupal_core:103 bs_project_sandbox:0","solrsort":"sis_project_release_usage desc"}
 D8_URL_ARGS = {"page":0,"filters":"drupal_core:7234 bs_project_sandbox:0","solrsort":"sis_project_release_usage desc"}
+
+
+M_VERSION = " Version "
+M_FILE    = " File    "
+M_PROJECT = " Project "
+M_USER    = " User    "
+M_PATH    = " Path    "
+M_UPDATE  = " Update  "
+
 
 #Get the source a direction
 #@param url URL direction, as an String
@@ -50,7 +59,7 @@ def get_source(url, options={}):
 	"""
 	
 	args = dict()
-	args.update({'User-Agent': 'Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))'})
+	args.update({'User-Agent': 'DruScan'})
 	
 	return requests.get(url, params=params_get, headers=args)
 
@@ -140,33 +149,50 @@ def search ( url, project , version ):
 		request_url_fail = url + "/" + ("themes", "modules") [ project == "modules"] + "/" + str(i) + "/CHANGELOG.txt"
 		request_url_corr = url + "/sites/all/" + ("themes", "modules") [ project == "modules"] + "/" + str(i) + "/CHANGELOG.txt"
 		
-		if ban_f == 0:
+		if ban_f == 0: # search in /modules or /themes
 			html = get_source(request_url_fail);
+			
 			if html.status_code == 200:
 				ban_c = 1
-				message(" - " + request_url_fail , "OK")
+				message(" - " + request_url_fail , M_FILE ,  "OK") #found project
+				search = re.findall(REG_GET_VERSION ,html.text) # find version
+				if search:
+					message("\t" + str(search[0][0] )+ str(search[0][1] ) + str(search[0][2] ), M_VERSION , "WARNING" )
 				
-		if ban_c == 0:
+		if ban_c == 0: # search in /sites/all/
 			html = get_source(request_url_corr);
+			
 			if html.status_code == 200:
 				ban_f = 1
-				message(request_url_corr , "OK")
-				search = re.findall(REG_GET_VERSION ,html.text)
+				message(request_url_corr ,M_FILE , "OK") # found project
+				search = re.findall(REG_GET_VERSION ,html.text) # find version
 				if search:
-					message("\t" + str(search[0][0] )+ str(search[0][1] ) + str(search[0][2] ), "WARNING" )
+					message("\t" + str(search[0][0] )+ str(search[0][1] ) + str(search[0][2] ), M_VERSION , "WARNING" )
 
-def search_users(url):
-	print 2
+#	
+#	Search user name
+#	@param url Drupal Site, as an String
+#	@param limit Limit the user id, as an Integer
+#
+
+def search_users(url, limit = 20):
+	
+	for i in range(limit):
+		html = get_source( url + "/user/" + str(i))
+		red  = re.findall(r"((users)\/(\w+))", html.url)
+	
+		if red:
+			message (red[0][2],M_USER ,"OK")
 
 #
 # Return version of core
-#
+#	@param url Drupal Site, as an String
 
 def detect_version( url ):
 	
-	chng   = get_source( "http://" + url + "/CHANGELOG.txt")
-	update = get_source( "http://" + url + "/update.php"   )
-	auth   = get_source( "http://" + url + "/authorize.php")
+	chng   = get_source( url + "/CHANGELOG.txt")
+	update = get_source( url + "/update.php"   )
+	auth   = get_source( url + "/authorize.php")
 	
 	search7 = re.findall( REG_GET_VERSION_D7 , chng.text   )
 	search6 = re.findall( REG_GET_VERSION_D6 , chng.text   )
@@ -175,7 +201,19 @@ def detect_version( url ):
 	if classe or search7 or auth.status_code == 403:
 		return 7
 	
-	
 	if search6 or auth.status_code == 404:
 		return 6
-	
+
+# Search Paths
+# @param url Drupal Site, as an String
+
+def search_urls( url ):
+	paths = [
+		"/user",
+		"/node/add",
+	]
+	for i in paths:
+		html = get_source (url + str(i))
+		if html.status_code == 200:
+			message(url + str(i), M_PATH ,"OK")
+
