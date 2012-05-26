@@ -35,6 +35,6 @@ $ ./druscan.py --url drupal-site.com --modules
 
 Search Themes
 ==============
-$ ./druscan.py --url imagenpoblana.com --themes
+$ ./druscan.py --url drupal-site.com --themes
 
 
