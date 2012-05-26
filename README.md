@@ -2,7 +2,8 @@ Dependencies
 ============
 	python-requests
 	python-simplejson
-
+	* ubuntu: apt-get install python-requests python-simplejson
+ 	* Fedora: yum install python-requests python-simplejson
 DruScan
 =======
 	$ ./druscan.py -h
