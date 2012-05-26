@@ -23,11 +23,11 @@ Testing:
 
 Update Modules
 ==============
-$ ./druscan.py --update-modules
+$ ./druscan.py --update-modules --limit 10 # default 3
 
 Update Themes
 ==============
-$ ./druscan.py --update-themes
+$ ./druscan.py --update-themes --limit 2 # default 3
 
 Search Modules
 ==============
