@@ -1,25 +1,25 @@
 DruScan
 =======
-$ ./druscan.py -h
-usage: druscan.py [-h] [--update-modules] [--update-themes] [--limit LIMIT]
+	$ ./druscan.py -h
+	usage: druscan.py [-h] [--update-modules] [--update-themes] [--limit LIMIT]
                   [--url URL] [--modules] [--themes] [--users] [--version]
 
-Drupal scanner by @dmouse
+	Drupal scanner by @dmouse
 
-optional arguments:
-  -h, --help        show this help message and exit
-  --version         show program's version number and exit
+	optional arguments:
+  	-h, --help        show this help message and exit
+  	--version         show program's version number and exit
 
-Core:
-  --update-modules  Update list modules
-  --update-themes   Update list themes
-  --limit LIMIT     Limit page on drupal.org
+	Core:
+  	--update-modules  Update list modules
+  	--update-themes   Update list themes
+  	--limit LIMIT     Limit page on drupal.org
 
-Testing:
-  --url URL         URL Drupal Site http://drupalsite.com
-  --modules         Search modules
-  --themes          Search themes
-  --users           Search users
+	Testing:
+  	--url URL         URL Drupal Site http://drupalsite.com
+  	--modules         Search modules
+  	--themes          Search themes
+  	--users           Search users
 	--paths           Search Paths
 
 Update Modules
