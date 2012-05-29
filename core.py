@@ -92,13 +92,13 @@ def update(project="modules", limit=3):
 		html7 = get_source( (DRUPAL_THEMES, DRUPAL_MODULES) [ project == "modules"] , {"args":D7_URL_ARGS} )
 		html8 = get_source( (DRUPAL_THEMES, DRUPAL_MODULES) [ project == "modules"] , {"args":D8_URL_ARGS} )
 	
-		match6 = re.findall(REG_GET_NAME_MODULE,html6.text)
+		match6 = re.findall(REG_GET_NAME_MODULE,html6.content)
 		name_modules6 += match6
 	
-		match7 = re.findall(REG_GET_NAME_MODULE,html7.text)
+		match7 = re.findall(REG_GET_NAME_MODULE,html7.content)
 		name_modules7 += match7
 	
-		match8 = re.findall(REG_GET_NAME_MODULE,html8.text)
+		match8 = re.findall(REG_GET_NAME_MODULE,html8.content)
 		name_modules8 += match8
 
 	if project == "modules":
@@ -155,7 +155,7 @@ def search ( url, project , version ):
 			if html.status_code == 200:
 				ban_c = 1
 				message(" - " + request_url_fail , M_FILE ,  "OK") #found project
-				search = re.findall(REG_GET_VERSION ,html.text) # find version
+				search = re.findall(REG_GET_VERSION ,html.content) # find version
 				if search:
 					message("\t" + str(search[0][0] )+ str(search[0][1] ) + str(search[0][2] ), M_VERSION , "WARNING" )
 				
@@ -165,7 +165,7 @@ def search ( url, project , version ):
 			if html.status_code == 200:
 				ban_f = 1
 				message(request_url_corr ,M_FILE , "OK") # found project
-				search = re.findall(REG_GET_VERSION ,html.text) # find version
+				search = re.findall(REG_GET_VERSION ,html.content) # find version
 				if search:
 					message("\t" + str(search[0][0] )+ str(search[0][1] ) + str(search[0][2] ), M_VERSION , "WARNING" )
 
@@ -194,9 +194,9 @@ def detect_version( url ):
 	update = get_source( url + "/update.php"   )
 	auth   = get_source( url + "/authorize.php")
 	
-	search7 = re.findall( REG_GET_VERSION_D7 , chng.text   )
-	search6 = re.findall( REG_GET_VERSION_D6 , chng.text   )
-	classe  = re.search (r"db-offline"       , update.text )
+	search7 = re.findall( REG_GET_VERSION_D7 , chng.content   )
+	search6 = re.findall( REG_GET_VERSION_D6 , chng.content   )
+	classe  = re.search (r"db-offline"       , update.content )
 	
 	if classe or search7 or auth.status_code == 403:
 		return 7
